@@ -97,7 +97,19 @@ namespace AcapellaDownloader
                 var s =dialog.ShowDialog();
                 if (s == DialogResult.OK)
                 {
-                   var link =  Parse(textBox1.Text, "willfromafar22k_hq");
+                    string link = "";
+                    switch (comboBox1.GetItemText(comboBox1.SelectedItem))
+                    {
+                    case "WillFromAfar":
+                         link = Parse(textBox1.Text, "willfromafar22k_hq");
+                        break;
+                    case "WillLittleCreature":
+                        link = Parse(textBox1.Text, "willlittlecreature22k_hq");
+                        break;
+                        
+                }
+                 
+                   
                     if (link == "")
                     {
                         MessageBox.Show("Can't download. Maybe this voice is paid.");
@@ -167,6 +179,41 @@ namespace AcapellaDownloader
             //   // Console.WriteLine("Caaaaant read voicemap");
 
             //}
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string link = "";
+            switch (comboBox1.GetItemText(comboBox1.SelectedItem))
+            {
+                case "WillFromAfar":
+                    link = Parse(textBox1.Text, "willfromafar22k_hq");
+                    break;
+                case "WillLittleCreature":
+                    link = Parse(textBox1.Text, "willlittlecreature22k_hq");
+                    break;
+
+            }
+
+
+            if (link == "")
+            {
+                MessageBox.Show("Can't download. Maybe this voice is paid.");
+                return;
+            }
+            using (var web = new WebClient())
+            {
+                WMPLib.WindowsMediaPlayer wplayer = new WMPLib.WindowsMediaPlayer();
+
+                wplayer.URL=link;
+                wplayer.controls.play();
+                
+            }
         }
     }
 }

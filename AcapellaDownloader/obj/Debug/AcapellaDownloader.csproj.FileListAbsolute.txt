@@ -12,3 +12,13 @@ c:\users\wnmer\Documents\Test\WillFromAfarDownloader.pdb
 c:\users\wnmer\source\repos\AcapellaDownloader\AcapellaDownloader\obj\Debug\WillFromAfarDownloader.Properties.Resources.resources
 c:\users\wnmer\source\repos\AcapellaDownloader\AcapellaDownloader\obj\Debug\WillFromAfarDownloader.exe
 c:\users\wnmer\source\repos\AcapellaDownloader\AcapellaDownloader\obj\Debug\WillFromAfarDownloader.pdb
+C:\Users\wnmer\Source\Repos\WillFromAfarDownloader\AcapellaDownloader\obj\Debug\AcapellaDownloader.csprojResolveAssemblyReference.cache
+C:\Users\wnmer\Source\Repos\WillFromAfarDownloader\AcapellaDownloader\obj\Debug\AcapellaDownloader.Form1.resources
+C:\Users\wnmer\Source\Repos\WillFromAfarDownloader\AcapellaDownloader\obj\Debug\WillFromAfarDownloader.Properties.Resources.resources
+C:\Users\wnmer\Source\Repos\WillFromAfarDownloader\AcapellaDownloader\obj\Debug\AcapellaDownloader.csproj.GenerateResource.cache
+C:\Users\wnmer\Source\Repos\WillFromAfarDownloader\AcapellaDownloader\obj\Debug\AcapellaDownloader.csproj.CoreCompileInputs.cache
+C:\Users\wnmer\Source\Repos\WillFromAfarDownloader\AcapellaDownloader\obj\Debug\AcapellaDownloader.csproj.CopyComplete
+C:\Users\wnmer\Source\Repos\WillFromAfarDownloader\AcapellaDownloader\obj\Debug\WillFromAfarDownloader.exe
+C:\Users\wnmer\Source\Repos\WillFromAfarDownloader\AcapellaDownloader\obj\Debug\WillFromAfarDownloader.pdb
+C:\Users\wnmer\Source\Repos\WillFromAfarDownloader\AcapellaDownloader\obj\Debug\Interop.WMPLib.dll
+C:\Users\wnmer\Source\Repos\WillFromAfarDownloader\AcapellaDownloader\obj\Debug\AcapellaDownloader.csproj.ResolveComReference.cache

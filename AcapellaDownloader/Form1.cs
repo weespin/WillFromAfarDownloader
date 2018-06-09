@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NAudio.Wave;
 using Newtonsoft.Json;
 
 namespace AcapellaDownloader
@@ -206,14 +207,23 @@ namespace AcapellaDownloader
                 MessageBox.Show("Can't download. Maybe this voice is paid.");
                 return;
             }
-            using (var web = new WebClient())
-            {
-                WMPLib.WindowsMediaPlayer wplayer = new WMPLib.WindowsMediaPlayer();
 
-                wplayer.URL=link;
-                wplayer.controls.play();
-                
+            Task.Run(() => Playsnd(link));
+        }
+
+        void Playsnd(string link)
+        {
+            using (var mf = new MediaFoundationReader(link))
+            using (var wo = new WaveOutEvent())
+            {
+                wo.Init(mf);
+                wo.Play();
+                while (wo.PlaybackState == PlaybackState.Playing)
+                {
+                    Thread.Sleep(1000);
+                }
             }
         }
+
     }
 }

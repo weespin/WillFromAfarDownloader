@@ -107,10 +107,8 @@ namespace AcapellaDownloader
                     case "WillLittleCreature":
                         link = Parse(textBox1.Text, "willlittlecreature22k_hq");
                         break;
-                        
                 }
-                 
-                   
+                             
                     if (link == "")
                     {
                         MessageBox.Show("Can't download. Maybe this voice is paid.");
@@ -166,18 +164,26 @@ namespace AcapellaDownloader
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+
+            for (int i = 0; i < WaveOut.DeviceCount; i++)
+            {
+                WaveOutCapabilities WOC = WaveOut.GetCapabilities(i);
+                comboBox2.Items.Add(WOC.ProductName);
+
+            }
+
+            //combobox1.items.add(Ryan);
             //try
             //{
-            //    maplist = JsonConvert.DeserializeObject<List<VoiceMap>>(File.ReadAllText("./voice.map"));
+            //    maplist = jsonconvert.deserializeobject<list<voicemap>>(file.readalltext("./voice.map"));
             //    foreach (var voice in maplist)
             //    {
-            //        comboBox1.Items.Add(voice.name);
+            //        combobox1.items.add(voice.name);
             //    }
             //}
-            //catch (Exception)
+            //catch (exception)
             //{
-            //   // Console.WriteLine("Caaaaant read voicemap");
+            //   // console.writeline("caaaaant read voicemap");
 
             //}
         }
@@ -198,8 +204,8 @@ namespace AcapellaDownloader
                 case "WillLittleCreature":
                     link = Parse(textBox1.Text, "willlittlecreature22k_hq");
                     break;
-
             }
+
 
 
             if (link == "")
@@ -207,15 +213,16 @@ namespace AcapellaDownloader
                 MessageBox.Show("Can't download. Maybe this voice is paid.");
                 return;
             }
-
-            Task.Run(() => Playsnd(link));
+            int id = comboBox2.SelectedIndex;
+            Task.Run(() => Playsnd(link, id));
         }
 
-        void Playsnd(string link)
+        void Playsnd(string link, int WaveOutDeviceId)
         {
             using (var mf = new MediaFoundationReader(link))
             using (var wo = new WaveOutEvent())
             {
+                wo.DeviceNumber = WaveOutDeviceId;
                 wo.Init(mf);
                 wo.Play();
                 while (wo.PlaybackState == PlaybackState.Playing)

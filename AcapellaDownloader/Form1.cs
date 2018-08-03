@@ -118,12 +118,13 @@ namespace AcapellaDownloader
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-          //  comboBox2.Text = o
             for (int i = 0; i < WaveOut.DeviceCount; i++)
             {
+              
                 WaveOutCapabilities WOC = WaveOut.GetCapabilities(i);
                 comboBox2.Items.Add(WOC.ProductName);
             }
+            comboBox2.Text = WaveOut.GetCapabilities(0).ProductName; //Returns default device
         }
 
         private void button2_Click(object sender, EventArgs e)

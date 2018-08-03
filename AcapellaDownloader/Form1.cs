@@ -42,7 +42,6 @@ namespace AcapellaDownloader
                 {"json", str + email + "\"}"}
 
             };
-
             var content = new FormUrlEncodedContent(values);
             var response = client.PostAsync("https://acapelavoices.acapela-group.com/index/getnonce/", content).Result
                 .Content.ReadAsStringAsync().Result;
@@ -53,8 +52,6 @@ namespace AcapellaDownloader
                 var request =
                     (HttpWebRequest)WebRequest.Create(
                         "http://www.acapela-group.com:8080/webservices/1-34-01-Mobility/Synthesizer");
-
-                Console.WriteLine(m.Groups[1]);
                 var g = "{\"nonce\":\"" + m.Groups[1] + ",\"user\":\"" + email + "\"}";
 
                 var enc =
@@ -86,12 +83,10 @@ namespace AcapellaDownloader
 
             return "";
         }
-        List<VoiceMap> maplist = new List<VoiceMap>();
+      
         private void button1_Click(object sender, EventArgs e)
         {
-           
-                //JustWill
-              //  Parse();
+          
                 SaveFileDialog dialog = new SaveFileDialog();
                 dialog.Filter = "MP3 File (*.mp3)|*.mp3";
                 dialog.FileName = "tts.mp3";
@@ -120,81 +115,24 @@ namespace AcapellaDownloader
                         MessageBox.Show("Downloaded!");
                     }
                 }
-
-            //} Maybe in next update.
-            //else
-            //{
-            //    var picked = maplist.Where(n => n.name == comboBox1.Text).FirstOrDefault();
-            //    if (picked == null)
-            //    {
-            //        return;
-            //    }
-            //    else
-            //    {
-            //        SaveFileDialog dialog = new SaveFileDialog();
-            //        dialog.Filter = "MP3 File (*.mp3)|*.mp3";
-            //        dialog.FileName = "tts.mp3";
-            //        var s = dialog.ShowDialog();
-            //        if (s == DialogResult.OK)
-            //        {
-            //            var link = Parse(textBox1.Text,picked.code);
-            //            if (link == "")
-            //            {
-            //                MessageBox.Show("Can't download. Maybe this voice is paid.");
-            //                return;
-            //            }
-            //            using (var web = new WebClient())
-            //            {
-
-            //                web.DownloadFile(link, dialog.FileName);
-            //                MessageBox.Show("Downloaded!");
-            //            }
-            //        }
-            //    }
-
-        
-    }
-
-     
-        public class VoiceMap
-        {
-            public string name { get; set; }
-            public string code { get; set; }
-            public string gender { get; set; }
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-
+          //  comboBox2.Text = o
             for (int i = 0; i < WaveOut.DeviceCount; i++)
             {
                 WaveOutCapabilities WOC = WaveOut.GetCapabilities(i);
                 comboBox2.Items.Add(WOC.ProductName);
-
             }
-
-            //combobox1.items.add(Ryan);
-            //try
-            //{
-            //    maplist = jsonconvert.deserializeobject<list<voicemap>>(file.readalltext("./voice.map"));
-            //    foreach (var voice in maplist)
-            //    {
-            //        combobox1.items.add(voice.name);
-            //    }
-            //}
-            //catch (exception)
-            //{
-            //   // console.writeline("caaaaant read voicemap");
-
-            //}
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(textBox1.Text))
+            {
+                MessageBox.Show("No text");
+                return;
+            }
             string link = "";
             switch (comboBox1.GetItemText(comboBox1.SelectedItem))
             {
@@ -205,9 +143,6 @@ namespace AcapellaDownloader
                     link = Parse(textBox1.Text, "willlittlecreature22k_hq");
                     break;
             }
-
-
-
             if (link == "")
             {
                 MessageBox.Show("Can't download. Maybe this voice is paid.");
@@ -227,10 +162,14 @@ namespace AcapellaDownloader
                 wo.Play();
                 while (wo.PlaybackState == PlaybackState.Playing)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(500);
                 }
             }
         }
 
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

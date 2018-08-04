@@ -8,9 +8,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace WillFromAfarDownloader
+namespace AcapellaDownloader
 {
-   static public class Utils
+   public static class Utils
     {
         public static string Parse(string text, string voiceid)
         {

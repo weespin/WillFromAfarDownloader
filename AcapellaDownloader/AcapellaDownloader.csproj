@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B3CC2F18-3283-450C-B82B-6AE19B3E9A25}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>WillFromAfarDownloader</RootNamespace>
-    <AssemblyName>WillFromAfarDownloader</AssemblyName>
+    <RootNamespace>AcapellaDownloader</RootNamespace>
+    <AssemblyName>AcapellaDownloader</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

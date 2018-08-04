@@ -101,7 +101,6 @@ namespace AcapellaDownloader
             }
             string link = Utils.Parse(textBox1.Text,
                 Voices.VoiceList.First(n => n.Name == SelectedLang).VoiceFile);
-
             if (link == "")
             {
                 MessageBox.Show("Can't download. Maybe this voice is paid.");
@@ -110,7 +109,6 @@ namespace AcapellaDownloader
             int id = comboBox2.SelectedIndex;
             Task.Run(() => Playsnd(link, id));
         }
-
         void Playsnd(string link, int WaveOutDeviceId)
         {
             using (var mf = new MediaFoundationReader(link))
@@ -125,7 +123,6 @@ namespace AcapellaDownloader
                 }
             }
         }
-
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             if (treeView1.SelectedNode != null)
@@ -137,7 +134,6 @@ namespace AcapellaDownloader
                 }
             }
         }
-
         public static string SelectedLang { get; set; } 
     }
 }

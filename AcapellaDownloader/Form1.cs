@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AcapellaDownloader.Properties;
 using NAudio.Wave;
 using Newtonsoft.Json;
 
@@ -61,8 +62,8 @@ namespace AcapellaDownloader
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            
-            Voices.Load();;
+           
+            Voices.Load();
             for (int i = 0; i < WaveOut.DeviceCount; i++)
             {
               

@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using NAudio.Wave;
 using Newtonsoft.Json;
-using WillFromAfarDownloader;
 
 namespace AcapellaDownloader
 {

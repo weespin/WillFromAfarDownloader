@@ -14,9 +14,7 @@ namespace UnitTests
         [Test]
         public void CheckVoices()
         {
-            Console.WriteLine("Console.WriteLine In ExampleOfConsoleOutput");
-            TestContext.WriteLine("TestContext.WriteLine In ExampleOfConsoleOutput");
-            TestContext.Progress.WriteLine("TestContext.Progress.WriteLine In ExampleOfConsoleOutput");
+         
             Assert.That(true, Is.EqualTo(ParseAllVoices()));
         }
 
@@ -29,12 +27,12 @@ namespace UnitTests
                 Voice voicelist = Voices.VoiceList[i];
                 if (Utils.Parse("123", voicelist.VoiceFile) == "")
                 {
-                    TestContext.Out.WriteLine($"[{i+1}/{Voices.VoiceList.Count}] {voicelist.Name} NOT PASSED");
+                    TestContext.Progress.WriteLine($"[{i+1}/{Voices.VoiceList.Count}] {voicelist.Name} NOT PASSED");
                     return false;
                 }
                 else
                 {
-                    TestContext.Out.WriteLine($"[{i+ 1}/{Voices.VoiceList.Count}]"+voicelist.Name + " PASSED");
+                    TestContext.Progress.WriteLine($"[{i+ 1}/{Voices.VoiceList.Count}]"+voicelist.Name + " PASSED");
                 }
                 
             }

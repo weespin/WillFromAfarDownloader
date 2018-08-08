@@ -19,15 +19,21 @@ namespace UnitTests
 
         public bool ParseAllVoices()
         {
-            var result = false;
+            
             Voices.Load();
-            foreach (var voicelist in Voices.VoiceList)
+            for (int i = 0; i < Voices.VoiceList.Count; i++)
             {
-                if (Utils.Parse("123 312", voicelist.VoiceFile) == "")
+                Voice voicelist = Voices.VoiceList[i];
+                if (Utils.Parse("123", voicelist.VoiceFile) == "")
                 {
-                    TestContext.WriteLine(voicelist.Name);
+                    TestContext.Out.WriteLine($"[{i+1}/{Voices.VoiceList.Count}] {voicelist.Name} NOT PASSED");
                     return false;
                 }
+                else
+                {
+                    TestContext.Out.WriteLine($"[{i+ 1}/{Voices.VoiceList.Count}]"+voicelist.Name + " PASSED");
+                }
+                
             }
 
             return true;

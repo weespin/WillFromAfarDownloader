@@ -14,6 +14,9 @@ namespace UnitTests
         [Test]
         public void CheckVoices()
         {
+            Console.WriteLine("Console.WriteLine In ExampleOfConsoleOutput");
+            TestContext.WriteLine("TestContext.WriteLine In ExampleOfConsoleOutput");
+            TestContext.Progress.WriteLine("TestContext.Progress.WriteLine In ExampleOfConsoleOutput");
             Assert.That(true, Is.EqualTo(ParseAllVoices()));
         }
 

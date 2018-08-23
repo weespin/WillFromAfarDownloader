@@ -29,10 +29,6 @@ namespace AcapellaDownloader
         {
             InitializeComponent();
         }
-        public static bool UseTempo;
-        public static float Speed = 1f;
-        public static float Octave;
-        private IWavePlayer wavePlayer;
         private void button1_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(textBox1.Text))

@@ -72,11 +72,11 @@ namespace AcapellaDownloader
             VoiceList.Add(new Voice("Micah", Gender.Male, "en_us", "enu_micah_22k_ns.bvcu"));
             VoiceList.Add(new Voice("Ella", Gender.Female, "en_us", "enu_ella_22k_ns.bvcu"));
             VoiceList.Add(new Voice("Saul", Gender.Male, "en_us", "enu_saul_22k_ns.bvcu"));
-            VoiceList.Add(new Voice("Valeria", Gender.Female, "en_us", "enu_valeriaenglish_22k_ns.bvcu"));
+            VoiceList.Add(new Voice("Valeria US", Gender.Female, "en_us", "enu_valeriaenglish_22k_ns.bvcu"));
             VoiceList.Add(new Voice("Laura", Gender.Female, "en_us", "enu_hd_laura_22k_lf.bvcu"));
             VoiceList.Add(new Voice("WillLittleCreature", Gender.Male, "en_us", "enu_willlittlecreature_22k_ns.bvcu"));
             VoiceList.Add(new Voice("Nelly", Gender.Female, "en_us", "enu_hd_nelly_22k_lf.bvcu"));
-            VoiceList.Add(new Voice("Emilio", Gender.Male, "en_us", "enu_emilioenglish_22k_ns.bvcu"));
+            VoiceList.Add(new Voice("Emilio US", Gender.Male, "en_us", "enu_emilioenglish_22k_ns.bvcu"));
             VoiceList.Add(new Voice("Will", Gender.Male, "en_us", "enu_hd_will_22k_lf.bvcu"));
             VoiceList.Add(new Voice("WillUpClose", Gender.Male, "en_us", "enu_willupclose_22k_ns.bvcu"));
             VoiceList.Add(new Voice("WillHappy", Gender.Male, "en_us", "enu_willhappy_22k_ns.bvcu"));
@@ -90,8 +90,8 @@ namespace AcapellaDownloader
             VoiceList.Add(new Voice("Antonio", Gender.Male, "es_es", "sps_hd_antonio_22k_lf.bvcu"));
             VoiceList.Add(new Voice("Maria", Gender.Female, "es_es", "sps_hd_maria_22k_lf.bvcu"));
             VoiceList.Add(new Voice("Ines", Gender.Female, "es_es", "sps_hd_ines_22k_lf.bvcu"));
-            VoiceList.Add(new Voice("Valeria", Gender.Female, "es_us", "spu_valeria_22k_ns.bvcu"));
-            VoiceList.Add(new Voice("Emilio", Gender.Male, "es_us", "spu_emilio_22k_ns.bvcu"));
+            VoiceList.Add(new Voice("Valeria Spanish", Gender.Female, "es_us", "spu_valeria_22k_ns.bvcu"));
+            VoiceList.Add(new Voice("Emilio Spanish", Gender.Male, "es_us", "spu_emilio_22k_ns.bvcu"));
             VoiceList.Add(new Voice("Rosa", Gender.Female, "es_us", "spu_hd_rosa_22k_lf.bvcu"));
             VoiceList.Add(new Voice("Rodrigo", Gender.Male, "es_us", "spu_hd_rodrigo_22k_lf.bvcu"));
             VoiceList.Add(new Voice("Sanna", Gender.Female, "fi_fi", "fif_hd_sanna_22k_lf.bvcu"));

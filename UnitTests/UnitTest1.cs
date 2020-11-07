@@ -20,9 +20,7 @@ namespace UnitTests
 
         public bool ParseAllVoices()
         {
-            
-            Voices.Load();
-            for (int i = 0; i < Voices.VoiceList.Count; i++)
+	        for (int i = 0; i < Voices.VoiceList.Count; i++)
             {
                 Voice voicelist = Voices.VoiceList[i];
                 if (Utils.Parse("123", voicelist.VoiceFile) == "")

@@ -13,6 +13,7 @@ namespace AcapellaDownloader
 		        CLI.PassCLI(commandLineArgs);
 				return;
 	        }
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());

@@ -1,64 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AcapellaDownloader.Properties;
-using NAudio.MediaFoundation;
 using NAudio.Wave;
-using NAudio.Wave.SampleProviders;
-using Newtonsoft.Json;
 
 namespace AcapellaDownloader
 {
     public partial class Form1 : Form
     {
-	    private float g_fVolume = 1;
+	    private float VoiceVolume = 1;
+	    private const string _noText = "You did not enter the text";
+	    private const string _noVoice = "Please select a voice";
+	    public const string downloadError = "A download error has occurred";
+	    public const string downloaded = "Done!";
         public Form1()
         {
             InitializeComponent();
         }
-        private void button1_Click(object sender, EventArgs e)
+        private void btnDownload_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(textBox1.Text))
-            {
-                MessageBox.Show("No text");
-                return;
-            }
-
-            if (string.IsNullOrEmpty(SelectedLang))
-            {
-                MessageBox.Show("Please select voice");
-                return;
-            }
-            SaveFileDialog dialog = new SaveFileDialog();
+	        string soundLink = GetGUISoundLink();
+	        SaveFileDialog dialog = new SaveFileDialog();
             dialog.Filter = "MP3 File (*.mp3)|*.mp3";
             dialog.FileName = "tts.mp3";
             var s = dialog.ShowDialog();
             if (s == DialogResult.OK)
             {
-                string link = Utils.Parse(textBox1.Text,
-                    Voices.VoiceList.First(n => n.Name == SelectedLang).VoiceFile);
-                if (link == "")
+	            using (var web = new WebClient())
                 {
-                    MessageBox.Show("Can't download. Maybe this voice is paid.");
-                    return;
-                }
-                using (var web = new WebClient())
-                {
-                    web.DownloadFile(link, dialog.FileName);
-                    MessageBox.Show("Downloaded!");
+                    web.DownloadFile(soundLink, dialog.FileName);
+                    MessageBox.Show(downloaded);
                 }
             }
         }
@@ -68,112 +43,106 @@ namespace AcapellaDownloader
            
             for (int i = 0; i < WaveOut.DeviceCount; i++)
             {
-              
-                WaveOutCapabilities WOC = WaveOut.GetCapabilities(i);
-                comboBox2.Items.Add(WOC.ProductName);
+	            WaveOutCapabilities WOC = WaveOut.GetCapabilities(i);
+                cbx_Devices.Items.Add(WOC.ProductName);
             }
-            comboBox2.Text = WaveOut.GetCapabilities(0).ProductName; //Returns default device
-            //Draw tree
+            cbx_Devices.Text = WaveOut.GetCapabilities(0).ProductName; //Returns default device
             var langs = Voices.VoiceList.GroupBy(i => i.Lang).Select(y => y.FirstOrDefault());
             foreach (var lang in langs)
             {
-                //  treeView1.Nodes.Add(new CultureInfo(lang.Lang.Replace("_","-")).DisplayName);
-                var node = treeView1.Nodes.Add(new CultureInfo(lang.Lang.Replace("_", "-")).DisplayName);
+                var node = tvLanguages.Nodes.Add(new CultureInfo(lang.Lang.Replace("_", "-")).DisplayName);
                 foreach (var v in Voices.VoiceList.Where(n=>n.Lang==lang.Lang).ToArray())
                 {
                     node.Nodes.Add(v.Name);
                 }
             }
 
-           // treeView1.Nodes.Add()
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        string GetGUISoundLink()
         {
-            if (string.IsNullOrEmpty(textBox1.Text))
-            {
-                MessageBox.Show("No text");
-                return;
-            }
 
-            if (string.IsNullOrEmpty(SelectedLang))
-            {
-                MessageBox.Show("Please select voice");
-                return;
-            }
-            string link = Utils.Parse(textBox1.Text,
-                Voices.VoiceList.First(n => n.Name == SelectedLang).VoiceFile);
-            if (link == "")
-            {
-                MessageBox.Show("Can't download. Maybe this voice is paid.");
-                return;
-            }
-            int id = comboBox2.SelectedIndex;
-            Task.Run(() => Playsnd(link, id));
+	        if (string.IsNullOrEmpty(txtTextIn.Text))
+	        {
+		        MessageBox.Show(_noText); 
+		        return "";
+	        }
+
+	        if (string.IsNullOrEmpty(SelectedLang))
+	        {
+		        MessageBox.Show(_noVoice);
+		        return "";
+	        }
+	        string soundLink = Utils.GetSoundLink(txtTextIn.Text, Voices.VoiceList.First(n => n.Name == SelectedLang).VoiceId);
+
+	        if (soundLink == "")
+	        {
+		        MessageBox.Show(downloadError);
+		        return "";
+	        }
+
+	        return soundLink;
         }
-        void Playsnd(string link, int WaveOutDeviceId)
+        private void btnPlay_Click(object sender, EventArgs e)
+        {
+	        string soundLink = GetGUISoundLink();
+	        if (string.IsNullOrEmpty(soundLink))
+	        {
+                return;
+	        }
+            int deviceId = cbx_Devices.SelectedIndex;
+            Task.Run(() => PlaySound(soundLink, deviceId));
+        }
+        void PlaySound(string link, int WaveOutDeviceId)
         {
             using (var mf = new MediaFoundationReader(link))
             using (var wo = new WaveOutEvent())
             {
                 wo.DeviceNumber = WaveOutDeviceId;
                 wo.Init(mf);
-                wo.Volume = g_fVolume;
+                wo.Volume = VoiceVolume;
                 wo.Play();
                 while (wo.PlaybackState == PlaybackState.Playing)
                 {
-	                wo.Volume = g_fVolume;
-
-                    Thread.Sleep(500);
+	                wo.Volume = VoiceVolume;
+	                Thread.Sleep(500);
                 }
             }
         }
-        private void EnableControls(bool isPlaying)
+        private void tvLanguages_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            button1.Enabled = !isPlaying;
-         
-        }
-        private void WavePlayerOnPlaybackStopped(object sender, StoppedEventArgs stoppedEventArgs)
-        {
-            if (stoppedEventArgs.Exception != null)
+            if (tvLanguages.SelectedNode != null)
             {
-                MessageBox.Show(stoppedEventArgs.Exception.Message, "Playback Stopped Unexpectedly");
-            }
-            EnableControls(false);
-        }
-        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            if (treeView1.SelectedNode != null)
-            {
-                if (treeView1.SelectedNode.Text != "" && treeView1.SelectedNode.Level != 0)
+                if (tvLanguages.SelectedNode.Text != "" && tvLanguages.SelectedNode.Level != 0)
                 {
-                    SelectedLang = treeView1.SelectedNode.Text;
-                    label1.Text = "Selected Voice = " + SelectedLang;
+                    SelectedLang = tvLanguages.SelectedNode.Text;
+                    lbl_currentVoice.Text = "Selected Voice = " + SelectedLang;
                 }
             }
         }
         public static string SelectedLang { get; set; }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void txtTextIn_Changed(object sender, EventArgs e)
         {
-            if (textBox1.Text.Length > 350) //Actually its 350 symbols, not 300
+            if (txtTextIn.Text.Length > 350) //Actually its 350 symbols, not 300
             { 
-                textBox1.ForeColor = Color.Red;
-                button1.Enabled = false;
-                button2.Enabled = false;
+                txtTextIn.ForeColor = Color.Red;
+                btnDownload.Enabled = false;
+                btnPlay.Enabled = false;
             }
             else
             {
                 
-                textBox1.ForeColor = Color.Black;
-                button1.Enabled =true;
-                button2.Enabled =true;
+                txtTextIn.ForeColor = Color.Black;
+                btnDownload.Enabled =true;
+                btnPlay.Enabled =true;
             }
         }
 
-		private void volumeSlider1_VolumeChanged(object sender, EventArgs e)
+		private void slVolume_VolumeChanged(object sender, EventArgs e)
 		{
-			g_fVolume = volumeSlider1.Volume;
+			VoiceVolume = slVolume.Volume;
 		}
+
 	}
 }

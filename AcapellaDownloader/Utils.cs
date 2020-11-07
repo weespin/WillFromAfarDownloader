@@ -1,75 +1,71 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace AcapellaDownloader
 {
    public static class Utils
-    {
-        public static string Parse(string text, string voiceid)
+   {
+	    private const string _NonceEndpoint = "https://acapelavoices.acapela-group.com/index/getnonce/";
+        private const string _SynthesizerEndpoint = "http://www.acapela-group.com:8080/webservices/1-34-01-Mobility/Synthesizer";
+        public static string GetSoundLink(string text, string voiceid)
         {
-            //voiceid = voiceid.Replace("22k_hq", "_22k_ns.bvcu");//enu_willhappy_22k_ns.bvcu
-            HttpClient client = new HttpClient();
-            Random rnd = new Random();
-            int length = rnd.Next(10, 20);
-            var str = "{\"googleid\":\"";
-            var email = "";
-            for (var i = 0; i < length; i++)
-            {
-                email += ((char)(rnd.Next(1, 26) + 64)).ToString();
-            }
+            HttpClient httpClient = new HttpClient();
+            Random random = new Random();
 
-            email += "@gmail.com";
-            var values = new Dictionary<string, string>
+            int emailLength = random.Next(10, 20);
+
+            StringBuilder fakeEmail = new StringBuilder();
+            for (var i = 0; i < emailLength; i++)
             {
-                {"json", str + email + "\"}"}
+                fakeEmail.Append((char)(random.Next(1, 26) + 64));
+            }
+            fakeEmail.Append("@gmail.com");
+
+            var nonceRequestValues = new Dictionary<string, string>
+            {
+                {"json", "{\"googleid\":\"" + fakeEmail.ToString() + "\"}"}
 
             };
-            var content = new FormUrlEncodedContent(values);
-            var response = client.PostAsync("https://acapelavoices.acapela-group.com/index/getnonce/", content).Result
-                .Content.ReadAsStringAsync().Result;
-            var re = new Regex(@"^\{\""nonce\""\:\""(.+)\""\}$");
-            var m = re.Match(response);
-            if (m.Groups.Count > 1)
+
+            var nonceRequestContent = new FormUrlEncodedContent(nonceRequestValues);
+            var nonceResponse = httpClient.PostAsync(_NonceEndpoint, nonceRequestContent).Result.Content.ReadAsStringAsync().Result;
+            var nonceRegex = new Regex(@"^\{\""nonce\""\:\""(.+)\""\}$");
+            var nonceRegexMatch = nonceRegex.Match(nonceResponse);
+
+            if (nonceRegexMatch.Groups.Count > 1)
             {
-                var request =
-                    (HttpWebRequest)WebRequest.Create(
-                        "http://www.acapela-group.com:8080/webservices/1-34-01-Mobility/Synthesizer");
-                var g = "{\"nonce\":\"" + m.Groups[1] + ",\"user\":\"" + email + "\"}";
+                var synthesizerRequest = (HttpWebRequest)WebRequest.Create(_SynthesizerEndpoint);
+                var synthesizerRequestString = $"req_voice={voiceid}&cl_pwd=&cl_vers=1-30&req_echo=ON&cl_login=AcapelaGroup&req_comment=%7B%22nonce%22%3A%22{nonceRegexMatch.Groups[1]}%22%2C%22user%22%3A%22{fakeEmail}%22%7D&req_text={Uri.EscapeDataString(text)}&cl_env=ACAPELA_VOICES&prot_vers=2&cl_app=AcapelaGroup_WebDemo_Android";
+                var data = Encoding.ASCII.GetBytes(synthesizerRequestString);
+                synthesizerRequest.Method = "POST";
+                synthesizerRequest.ContentType = "application/x-www-form-urlencoded";
+                synthesizerRequest.ContentLength = data.Length;
 
-                var enc =
-                    $"req_voice={voiceid}&cl_pwd=&cl_vers=1-30&req_echo=ON&cl_login=AcapelaGroup&req_comment=%7B%22nonce%22%3A%22{m.Groups[1]}%22%2C%22user%22%3A%22{email}%22%7D&req_text={Uri.EscapeDataString(text)}&cl_env=ACAPELA_VOICES&prot_vers=2&cl_app=AcapelaGroup_WebDemo_Android";
-
-                var data = Encoding.ASCII.GetBytes(enc.ToString());
-                request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
-                request.ContentLength = data.Length;
-
-                using (var stream = request.GetRequestStream())
+                using (var stream = synthesizerRequest.GetRequestStream())
                 {
                     stream.Write(data, 0, data.Length);
                 }
 
-                var responses = (HttpWebResponse)request.GetResponse();
-
-                var responseString = new StreamReader(responses.GetResponseStream()).ReadToEnd();
-                var reg = new Regex("snd_url=(.+)&snd_size");
-                var regs = reg.Match(responseString);
-                if (regs.Success)
+                var synthesizerResponseStream = synthesizerRequest.GetResponse().GetResponseStream();
+                if (synthesizerResponseStream == null)
                 {
-                    return regs.Groups[1].Value;
+	                return "";
                 }
+                var synthesizerResponseString = new StreamReader(synthesizerResponseStream).ReadToEnd();
+                var synthesizerRegex = new Regex("snd_url=(.+)&snd_size");
+                var synthesizerMatch = synthesizerRegex.Match(synthesizerResponseString);
 
+                if (synthesizerMatch.Success)
+                {
+                    return synthesizerMatch.Groups[1].Value;
+                }
                 return "";
-
             }
-
             return "";
         }
     }

@@ -25,10 +25,11 @@ namespace AcapellaDownloader
 
    public static class Voices
     {
-       public static List<Voice> VoiceList = new List<Voice>();
+       public static List<Voice> VoiceList;
 
-        public static void Load()
+        static Voices()
         {
+	        VoiceList = new List<Voice>();
             //Ugghh
             VoiceList.Add(new Voice("Mehdi",Gender.Male, "ar_sa", "ar_sa_hd_mehdi_22k_lf.bvcu")); 
             VoiceList.Add(new Voice("Nizar", Gender.Male, "ar_sa", "ar_sa_hd_nizar_22k_lf.bvcu"));

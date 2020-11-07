@@ -24,7 +24,7 @@ namespace AcapellaDownloader
 {
     public partial class Form1 : Form
     {
-      
+	    private float g_fVolume = 1;
         public Form1()
         {
             InitializeComponent();
@@ -66,7 +66,6 @@ namespace AcapellaDownloader
         private void Form1_Load(object sender, EventArgs e)
         {
            
-            Voices.Load();
             for (int i = 0; i < WaveOut.DeviceCount; i++)
             {
               
@@ -119,9 +118,12 @@ namespace AcapellaDownloader
             {
                 wo.DeviceNumber = WaveOutDeviceId;
                 wo.Init(mf);
+                wo.Volume = g_fVolume;
                 wo.Play();
                 while (wo.PlaybackState == PlaybackState.Playing)
                 {
+	                wo.Volume = g_fVolume;
+
                     Thread.Sleep(500);
                 }
             }
@@ -168,5 +170,10 @@ namespace AcapellaDownloader
                 button2.Enabled =true;
             }
         }
-    }
+
+		private void volumeSlider1_VolumeChanged(object sender, EventArgs e)
+		{
+			g_fVolume = volumeSlider1.Volume;
+		}
+	}
 }

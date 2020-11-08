@@ -101,7 +101,7 @@ namespace AcapellaDownloader
 			}
 			if (text.Length == 0)
 			{
-				Console.WriteLine("No text specified. Args -t (text) -o (output file) -v (voice code) --voice-list (get all voice codes)");
+				Console.WriteLine("No text specified. Args -t (text) -o (output file) -v (voice code) --voice-list (get all voice id's)");
 				return;
 			}
 
@@ -114,7 +114,7 @@ namespace AcapellaDownloader
 			{
 				if (Voices.VoiceList.FirstOrDefault(n => n.VoiceId == voice) == null)
 				{
-					Console.WriteLine("Voice code is not valid. Try to launch with --voice-list to get all voices");
+					Console.WriteLine("Voice id is not valid. Try to launch with --voice-list to get all voices");
 				}
 			}
 			string dlLink = Utils.GetSoundLink(text, voice);

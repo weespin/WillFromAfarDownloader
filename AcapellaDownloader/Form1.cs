@@ -156,11 +156,11 @@ namespace AcapellaDownloader
 		{
 			if (tbPitch.Value > 11)
 			{
-				Pitch =((tbPitch.Value - 1) / 10f);
+				Pitch =( (tbPitch.Value - 1) / 10f);
 			}
 			else if (tbPitch.Value < 11)
 			{
-				Pitch = (((tbPitch.Value - 1) / 10f * 0.5f) + 0.5f);
+				Pitch = ( ((tbPitch.Value - 1) / 10f * 0.5f) + 0.5f);
 			}
 			else
 			{

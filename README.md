@@ -6,3 +6,5 @@ Launch WillFromAfarDownloader.exe use -t (text) -v (voice code) -o (output file)
 Use --voice-list argument to get all voice id's
 #### Example: 
 AcapellaDownloader.exe -t Test string 1 2 3 -v enu_willhappy_22k_ns.bvcu -o test.mp3
+## Requirements
+Windows 8 or Windows 10

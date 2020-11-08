@@ -7,19 +7,22 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 
 namespace AcapellaDownloader
 {
     public partial class Form1 : Form
     {
-	    private float VoiceVolume = 1;
-	    private const string _noText = "You did not enter the text";
+	    private float VoiceVolume = 1f;
+	    private float Pitch = 1f;
+        private const string _noText = "You did not enter the text";
 	    private const string _noVoice = "Please select a voice";
 	    public const string downloadError = "A download error has occurred";
 	    public const string downloaded = "Done!";
+	    SmbPitchShiftingSampleProvider PitchProvider;
         public Form1()
         {
-            InitializeComponent();
+	        InitializeComponent();
         }
         private void btnDownload_Click(object sender, EventArgs e)
         {
@@ -30,10 +33,12 @@ namespace AcapellaDownloader
             var s = dialog.ShowDialog();
             if (s == DialogResult.OK)
             {
-	            using (var web = new WebClient())
-                {
-                    web.DownloadFile(soundLink, dialog.FileName);
-                    MessageBox.Show(downloaded);
+	            using (var mf = new MediaFoundationReader(soundLink))
+	            {
+		            PitchProvider = new SmbPitchShiftingSampleProvider(mf.ToSampleProvider().ToMono());
+		            PitchProvider.PitchFactor = Pitch;
+		            MediaFoundationEncoder.EncodeToMp3(PitchProvider.ToWaveProvider(), dialog.FileName, 48000);
+		            MessageBox.Show(downloaded);
                 }
             }
         }
@@ -99,11 +104,14 @@ namespace AcapellaDownloader
             using (var wo = new WaveOutEvent())
             {
                 wo.DeviceNumber = WaveOutDeviceId;
-                wo.Init(mf);
+                PitchProvider = new SmbPitchShiftingSampleProvider(mf.ToSampleProvider().ToMono());
+                PitchProvider.PitchFactor = Pitch;
+                wo.Init(PitchProvider);
                 wo.Volume = VoiceVolume;
                 wo.Play();
                 while (wo.PlaybackState == PlaybackState.Playing)
                 {
+	                PitchProvider.PitchFactor = Pitch;
 	                wo.Volume = VoiceVolume;
 	                Thread.Sleep(500);
                 }
@@ -144,5 +152,23 @@ namespace AcapellaDownloader
 			VoiceVolume = slVolume.Volume;
 		}
 
+		private void tbPitch_Scroll(object sender, EventArgs e)
+		{
+			if (tbPitch.Value > 11)
+			{
+				Pitch =((tbPitch.Value - 1) / 10f);
+			}
+			else if (tbPitch.Value < 11)
+			{
+				Pitch = (((tbPitch.Value - 1) / 10f * 0.5f) + 0.5f);
+			}
+			else
+			{
+				Pitch = 1f;
+			}
+
+			lbl_pitchValue.Text = Pitch.ToString();
+
+		}
 	}
 }

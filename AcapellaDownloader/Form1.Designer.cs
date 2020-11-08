@@ -37,6 +37,10 @@
 			this.lbl_currentVoice = new System.Windows.Forms.Label();
 			this.slVolume = new NAudio.Gui.VolumeSlider();
 			this.lbl_Volume = new System.Windows.Forms.Label();
+			this.tbPitch = new System.Windows.Forms.TrackBar();
+			this.lbl_pitchValue = new System.Windows.Forms.Label();
+			this.lbl_pitch = new System.Windows.Forms.Label();
+			((System.ComponentModel.ISupportInitialize)(this.tbPitch)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// txtTextIn
@@ -109,11 +113,43 @@
 			this.lbl_Volume.TabIndex = 8;
 			this.lbl_Volume.Text = "Volume:";
 			// 
+			// tbPitch
+			// 
+			this.tbPitch.Location = new System.Drawing.Point(422, 234);
+			this.tbPitch.Maximum = 21;
+			this.tbPitch.Minimum = 1;
+			this.tbPitch.Name = "tbPitch";
+			this.tbPitch.Size = new System.Drawing.Size(156, 45);
+			this.tbPitch.TabIndex = 9;
+			this.tbPitch.Value = 11;
+			this.tbPitch.Scroll += new System.EventHandler(this.tbPitch_Scroll);
+			// 
+			// lbl_pitchValue
+			// 
+			this.lbl_pitchValue.AutoSize = true;
+			this.lbl_pitchValue.Location = new System.Drawing.Point(501, 269);
+			this.lbl_pitchValue.Name = "lbl_pitchValue";
+			this.lbl_pitchValue.Size = new System.Drawing.Size(13, 13);
+			this.lbl_pitchValue.TabIndex = 10;
+			this.lbl_pitchValue.Text = "1";
+			// 
+			// lbl_pitch
+			// 
+			this.lbl_pitch.AutoSize = true;
+			this.lbl_pitch.Location = new System.Drawing.Point(464, 269);
+			this.lbl_pitch.Name = "lbl_pitch";
+			this.lbl_pitch.Size = new System.Drawing.Size(34, 13);
+			this.lbl_pitch.TabIndex = 11;
+			this.lbl_pitch.Text = "Pitch:";
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(756, 291);
+			this.Controls.Add(this.lbl_pitch);
+			this.Controls.Add(this.lbl_pitchValue);
+			this.Controls.Add(this.tbPitch);
 			this.Controls.Add(this.lbl_Volume);
 			this.Controls.Add(this.slVolume);
 			this.Controls.Add(this.lbl_currentVoice);
@@ -126,6 +162,7 @@
 			this.Name = "Form1";
 			this.Text = "AcapellaDownloader";
 			this.Load += new System.EventHandler(this.Form1_Load);
+			((System.ComponentModel.ISupportInitialize)(this.tbPitch)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -141,6 +178,9 @@
         private System.Windows.Forms.Label lbl_currentVoice;
 		private NAudio.Gui.VolumeSlider slVolume;
 		private System.Windows.Forms.Label lbl_Volume;
+		private System.Windows.Forms.TrackBar tbPitch;
+		private System.Windows.Forms.Label lbl_pitchValue;
+		private System.Windows.Forms.Label lbl_pitch;
 	}
 }
 

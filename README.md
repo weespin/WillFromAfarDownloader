@@ -1,5 +1,7 @@
 # WillFromAfarDownloader
-GUI App for downloading TTS from Acapella Group
+## GUI App for downloading TTS from Acapella Group
+[![Github Downloads (total)](https://img.shields.io/github/downloads/weespin/WillFromAfarDownloader/total.svg)](https://github.com/weespin/WillFromAfarDownloader)
+
 ![Screenshot](https://yiff.nullcoreproject.net/i/45006d99.png)
 ## How to use CLI version
 Launch WillFromAfarDownloader.exe use -t (text) -v (voice code) -o (output file) arguments

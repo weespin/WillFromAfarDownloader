@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -33,12 +34,24 @@ namespace AcapellaDownloader
             var s = dialog.ShowDialog();
             if (s == DialogResult.OK)
             {
-	            using (var mf = new MediaFoundationReader(soundLink))
-	            {
-		            PitchProvider = new SmbPitchShiftingSampleProvider(mf.ToSampleProvider().ToMono());
-		            PitchProvider.PitchFactor = Pitch;
-		            MediaFoundationEncoder.EncodeToMp3(PitchProvider.ToWaveProvider(), dialog.FileName, 48000);
-		            MessageBox.Show(downloaded);
+                if (!Program.bOldWindows)
+                {
+                    using (var mf = new MediaFoundationReader(soundLink))
+                    {
+                        PitchProvider = new SmbPitchShiftingSampleProvider(mf.ToSampleProvider().ToMono());
+                        PitchProvider.PitchFactor = Pitch;
+                        MediaFoundationEncoder.EncodeToMp3(PitchProvider.ToWaveProvider(), dialog.FileName, 48000);
+                        MessageBox.Show(downloaded);
+                    }
+                }
+                else
+                {
+                    using (var wc = new WebClient())
+                    {
+                        wc.DownloadFile(soundLink, dialog.FileName);
+                        MessageBox.Show(downloaded);
+
+                    }
                 }
             }
         }
@@ -100,20 +113,34 @@ namespace AcapellaDownloader
         }
         void PlaySound(string link, int WaveOutDeviceId)
         {
-            using (var mf = new MediaFoundationReader(link))
-            using (var wo = new WaveOutEvent())
+            using (Stream ms = new MemoryStream())
             {
-                wo.DeviceNumber = WaveOutDeviceId;
-                PitchProvider = new SmbPitchShiftingSampleProvider(mf.ToSampleProvider().ToMono());
-                PitchProvider.PitchFactor = Pitch;
-                wo.Init(PitchProvider);
-                wo.Volume = VoiceVolume;
-                wo.Play();
-                while (wo.PlaybackState == PlaybackState.Playing)
+                using (Stream stream = WebRequest.Create(link).GetResponse().GetResponseStream())
                 {
-	                PitchProvider.PitchFactor = Pitch;
-	                wo.Volume = VoiceVolume;
-	                Thread.Sleep(500);
+                    byte[] buffer = new byte[4096];
+                    int read;
+                    while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        ms.Write(buffer, 0, read);
+                    }
+                }
+
+                ms.Position = 0;
+                using (WaveStream mf = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(new Mp3FileReader(ms))))
+                using (var wo = new WaveOutEvent())
+                {
+                    wo.DeviceNumber = WaveOutDeviceId;
+                    PitchProvider = new SmbPitchShiftingSampleProvider(mf.ToSampleProvider().ToMono());
+                    PitchProvider.PitchFactor = Pitch;
+                    wo.Init(PitchProvider);
+                    wo.Volume = VoiceVolume;
+                    wo.Play();
+                    while (wo.PlaybackState == PlaybackState.Playing)
+                    {
+                        PitchProvider.PitchFactor = Pitch;
+                        wo.Volume = VoiceVolume;
+                        Thread.Sleep(500);
+                    }
                 }
             }
         }

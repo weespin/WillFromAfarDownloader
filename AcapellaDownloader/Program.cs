@@ -4,10 +4,17 @@ namespace AcapellaDownloader
 {
 	static class Program
     {
+        public static bool bOldWindows = false;
 	    [STAThread]
         static void Main()
         {
-	        string[] commandLineArgs = Environment.GetCommandLineArgs();
+            var OsVersion = Environment.OSVersion.Version;
+            if (OsVersion.Major <= 6 && OsVersion.Minor <= 1)
+            {
+                bOldWindows = true;
+            }
+
+            string[] commandLineArgs = Environment.GetCommandLineArgs();
 	        if (commandLineArgs.Length > 1)
 	        {
 		        CLI.PassCLI(commandLineArgs);

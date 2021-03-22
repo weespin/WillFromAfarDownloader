@@ -9,4 +9,5 @@ Use --voice-list argument to get all voice id's
 #### Example: 
 AcapellaDownloader.exe -t Test string 1 2 3 -v enu_willhappy_22k_ns.bvcu -o test.mp3
 ## Requirements
-Windows 8 or Windows 10
+Windows 7 (without changing pitch on download), Windows 8 or Windows 10
+

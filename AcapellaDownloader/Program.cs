@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
+using Microsoft.Win32;
+
 namespace AcapellaDownloader
 {
 	static class Program
@@ -13,7 +15,11 @@ namespace AcapellaDownloader
             {
                 bOldWindows = true;
             }
-
+            if (Registry.CurrentUser.OpenSubKey("Software\\Wine", false) != null)
+            {
+                //Wine!
+                bOldWindows = true;
+            }
             string[] commandLineArgs = Environment.GetCommandLineArgs();
 	        if (commandLineArgs.Length > 1)
 	        {

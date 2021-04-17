@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Win32;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 
@@ -16,7 +17,7 @@ namespace AcapellaDownloader
     {
 	    private float VoiceVolume = 1f;
 	    private float Pitch = 1f;
-        private const string _noText = "You did not enter the text";
+        private const string _noText = "You did not enter any text";
 	    private const string _noVoice = "Please select a voice";
 	    public const string downloadError = "A download error has occurred";
 	    public const string downloaded = "Done!";
@@ -28,6 +29,10 @@ namespace AcapellaDownloader
         private void btnDownload_Click(object sender, EventArgs e)
         {
 	        string soundLink = GetGUISoundLink();
+            if (soundLink == "")
+            {
+                return;
+            }
 	        SaveFileDialog dialog = new SaveFileDialog();
             dialog.Filter = "MP3 File (*.mp3)|*.mp3";
             dialog.FileName = "tts.mp3";
@@ -49,6 +54,7 @@ namespace AcapellaDownloader
                     using (var wc = new WebClient())
                     {
                         wc.DownloadFile(soundLink, dialog.FileName);
+
                         MessageBox.Show(downloaded);
 
                     }
@@ -57,8 +63,7 @@ namespace AcapellaDownloader
         }
 
         private void Form1_Load(object sender, EventArgs e)
-        {
-           
+        { 
             for (int i = 0; i < WaveOut.DeviceCount; i++)
             {
 	            WaveOutCapabilities WOC = WaveOut.GetCapabilities(i);
@@ -68,7 +73,17 @@ namespace AcapellaDownloader
             var langs = Voices.VoiceList.GroupBy(i => i.Lang).Select(y => y.FirstOrDefault());
             foreach (var lang in langs)
             {
-                var node = tvLanguages.Nodes.Add(new CultureInfo(lang.Lang.Replace("_", "-")).DisplayName);
+                TreeNode node;
+                try
+                {
+                    node = tvLanguages.Nodes.Add(new CultureInfo(lang.Lang.Replace("_", "-")).DisplayName);
+                }
+                catch (Exception)
+                {
+                    //Wine Workaround
+                    node = tvLanguages.Nodes.Add(lang.Lang);
+                }
+               
                 foreach (var v in Voices.VoiceList.Where(n=>n.Lang==lang.Lang).ToArray())
                 {
                     node.Nodes.Add(v.Name);

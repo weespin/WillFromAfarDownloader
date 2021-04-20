@@ -24,6 +24,7 @@ If applicable, add screenshots to help explain your problem.
 **Desktop (please complete the following information):**
  - OS: [e.g. Windows 10 20H2]
  - Version [e.g. 2.2.2]
- - 
+
+
 **Additional context**
 Add any other context about the problem here.

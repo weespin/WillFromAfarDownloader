@@ -13,7 +13,7 @@ AcapellaDownloader.exe -t Test string 1 2 3 -v enu_willhappy_22k_ns.bvcu -o test
 ```
 ## Requirements
 ##### Works fully on:
-Windows 8, Windows 10
+Windows 8, Windows 10, Windows 11
 ##### Without changing pitch on download:
 Windows 7, Linux (under Wine) 
 

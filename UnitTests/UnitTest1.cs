@@ -36,7 +36,7 @@ namespace UnitTests
                 }
                 else
                 {
-                    TestContext.Progress.WriteLine($"[{i+ 1}/{Voices.VoiceList.Count}]"+voicelist.Name + " HAS PASSED");
+                    TestContext.Progress.WriteLine($"[{i+ 1}/{Voices.VoiceList.Count}] {voicelist.Name} HAS PASSED");
                 }
                 
             }

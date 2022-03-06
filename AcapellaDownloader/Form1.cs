@@ -25,6 +25,13 @@ namespace AcapellaDownloader
         public Form1()
         {
 	        InitializeComponent();
+
+            if (Program.bOldWindows)
+            {
+                radio_mp3.Hide();
+                radio_wav.Hide();
+            }
+
         }
         private void btnDownload_Click(object sender, EventArgs e)
         {
@@ -34,8 +41,17 @@ namespace AcapellaDownloader
                 return;
             }
 	        SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "MP3 File (*.mp3)|*.mp3";
-            dialog.FileName = "tts.mp3";
+            if (radio_mp3.Checked)
+            {
+                dialog.Filter = "MP3 File (*.mp3)|*.mp3";
+                dialog.FileName = "tts.mp3";
+            }
+            else
+            {
+                dialog.Filter = "WAV File (*.wav)|*.wav";
+                dialog.FileName = "tts.wav";
+            }
+
             var s = dialog.ShowDialog();
             if (s == DialogResult.OK)
             {
@@ -45,7 +61,15 @@ namespace AcapellaDownloader
                     {
                         PitchProvider = new SmbPitchShiftingSampleProvider(mf.ToSampleProvider().ToMono());
                         PitchProvider.PitchFactor = Pitch;
-                        MediaFoundationEncoder.EncodeToMp3(PitchProvider.ToWaveProvider(), dialog.FileName, 48000);
+                        if (radio_mp3.Checked)
+                        {
+                            MediaFoundationEncoder.EncodeToMp3(PitchProvider.ToWaveProvider(), dialog.FileName, 48000);
+                        }
+                        else
+                        {
+                            WaveFileWriter.CreateWaveFile(dialog.FileName, PitchProvider.ToWaveProvider());
+                        }
+
                         MessageBox.Show(downloaded);
                     }
                 }
@@ -54,7 +78,6 @@ namespace AcapellaDownloader
                     using (var wc = new WebClient())
                     {
                         wc.DownloadFile(soundLink, dialog.FileName);
-
                         MessageBox.Show(downloaded);
 
                     }
@@ -118,6 +141,7 @@ namespace AcapellaDownloader
         }
         private void btnPlay_Click(object sender, EventArgs e)
         {
+
 	        string soundLink = GetGUISoundLink();
 	        if (string.IsNullOrEmpty(soundLink))
 	        {

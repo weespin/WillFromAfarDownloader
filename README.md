@@ -4,17 +4,18 @@
 
 ![Screenshot](https://yiff.nullcoreproject.net/i/45006d99.png)
 ## How to use CLI version
-Launch WillFromAfarDownloader.exe use -t (text) -v (voice code) -o (output file) arguments
-Use --voice-list argument to get all voice id's
+Launch WillFromAfarDownloader.exe using ```-t (text) -v (voice code) -o (output file)``` arguments
+
+Use ```--voice-list``` argument to get all voice id's
 #### Example: 
 ```
 AcapellaDownloader.exe -t Test string 1 2 3 -v enu_willhappy_22k_ns.bvcu -o test.mp3
 ```
 ## Requirements
 ##### Works fully on:
-Windows 8, Windows 10
+Windows 8, Windows 10, Windows 11
 ##### Without changing pitch on download:
-Windows 7, Linux (using Wine) 
+Windows 7, Linux (under Wine) 
 
 ## Installation guide for Linux
 

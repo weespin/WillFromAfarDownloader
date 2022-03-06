@@ -148,7 +148,7 @@
             // 
             this.radio_mp3.AutoSize = true;
             this.radio_mp3.Checked = true;
-            this.radio_mp3.Location = new System.Drawing.Point(202, 262);
+            this.radio_mp3.Location = new System.Drawing.Point(635, 232);
             this.radio_mp3.Name = "radio_mp3";
             this.radio_mp3.Size = new System.Drawing.Size(48, 17);
             this.radio_mp3.TabIndex = 12;
@@ -159,7 +159,7 @@
             // radio_wav
             // 
             this.radio_wav.AutoSize = true;
-            this.radio_wav.Location = new System.Drawing.Point(256, 262);
+            this.radio_wav.Location = new System.Drawing.Point(696, 232);
             this.radio_wav.Name = "radio_wav";
             this.radio_wav.Size = new System.Drawing.Size(48, 17);
             this.radio_wav.TabIndex = 13;

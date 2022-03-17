@@ -55,7 +55,7 @@ namespace AcapellaDownloader
             var s = dialog.ShowDialog();
             if (s == DialogResult.OK)
             {
-                if (!Program.bOldWindows && !(radio_mp3.Checked && Pitch == 1f))
+                if (!Program.bOldWindows && !(radio_mp3.Checked && Math.Abs(Pitch - 1f) <= 0.01f))
                 {
                     using (var mf = new MediaFoundationReader(soundLink))
                     {

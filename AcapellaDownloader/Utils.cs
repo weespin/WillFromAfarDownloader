@@ -11,7 +11,7 @@ namespace AcapellaDownloader
    public static class Utils
    {
 	    private const string _NonceEndpoint = "https://acapelavoices.acapela-group.com/index/getnonce/";
-        private const string _SynthesizerEndpoint = "http://www.acapela-group.com:8080/webservices/1-34-01-Mobility/Synthesizer";
+        private const string _SynthesizerEndpoint = "https://www.acapela-group.com:8443/Services/Synthesizer";
         private static string _CachedNonce = "";
         private static string _CachedEmail = "";
         private static bool _LastFailed = false;

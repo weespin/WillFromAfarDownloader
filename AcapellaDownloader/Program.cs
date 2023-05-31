@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
@@ -10,6 +11,9 @@ namespace AcapellaDownloader
 	    [STAThread]
         static void Main()
         {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
+
             var OsVersion = Environment.OSVersion.Version;
             if (OsVersion.Major <= 6 && OsVersion.Minor <= 1)
             {

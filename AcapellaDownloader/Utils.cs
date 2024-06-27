@@ -29,6 +29,8 @@ namespace AcapellaDownloader
                 fakeEmail.Append((char)(random.Next(1, 26) + 64));
             }
 
+            fakeEmail.Append("@gmail.com");
+
             var nonceRequestValues = new Dictionary<string, string>
             {
                 { "json", "{\"googleid\":\"" + fakeEmail.ToString() + "\"}" }

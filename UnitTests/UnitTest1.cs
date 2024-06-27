@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net;
 using System.Text;
 using AcapellaDownloader;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,7 +18,22 @@ namespace UnitTests
         {
 	        Assert.That(true, Is.EqualTo(ParseAllVoices()));
         }
-
+        const int InvalidMP3Size = 906;
+        static bool CheckValidAudio(string fileUrl)
+        {
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    byte[] fileData = client.DownloadData(fileUrl);
+                    return fileData.Length > InvalidMP3Size;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+        }
         public bool ParseAllVoices()
         {
 	        Random random = new Random();
@@ -29,7 +45,8 @@ namespace UnitTests
                 {
 	                randStr.Append((char)(random.Next(1, 26) + 64));
                 }
-                if (Utils.GetSoundLink(randStr.ToString(), voicelist.VoiceId) == "")
+                string AudioLink = Utils.GetSoundLink(randStr.ToString(), voicelist.VoiceId);
+                if (AudioLink == "" || CheckValidAudio(AudioLink) == false)
                 {
                     TestContext.Progress.WriteLine($"[{i+1}/{Voices.VoiceList.Count}] {voicelist.Name} NOT PASSED");
                     return false;

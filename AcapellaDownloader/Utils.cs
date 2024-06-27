@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -8,9 +9,9 @@ using System.Text.RegularExpressions;
 
 namespace AcapellaDownloader
 {
-   public static class Utils
-   {
-	    private const string _NonceEndpoint = "https://acapelavoices.acapela-group.com/index/getnonce/";
+    public static class Utils
+    {
+        private const string _NonceEndpoint = "https://acapelavoices.acapela-group.com/index/getnonce/";
         private const string _SynthesizerEndpoint = "https://www.acapela-group.com:8443/Services/Synthesizer";
         private static string _CachedNonce = "";
         private static string _CachedEmail = "";
@@ -27,8 +28,6 @@ namespace AcapellaDownloader
             {
                 fakeEmail.Append((char)(random.Next(1, 26) + 64));
             }
-
-            fakeEmail.Append("@gmail.com");
 
             var nonceRequestValues = new Dictionary<string, string>
             {
@@ -59,7 +58,26 @@ namespace AcapellaDownloader
                 UpdateNonceToken();
             }
             var synthesizerRequest = (HttpWebRequest)WebRequest.Create(_SynthesizerEndpoint);
-            var synthesizerRequestString = $"req_voice={voiceid}&cl_pwd=&cl_vers=1-30&req_echo=ON&cl_login=AcapelaGroup&req_comment=%7B%22nonce%22%3A%22{_CachedNonce}%22%2C%22user%22%3A%22{_CachedEmail}%22%7D&req_text={Uri.EscapeDataString(text)}&cl_env=ACAPELA_VOICES&prot_vers=2&cl_app=AcapelaGroup_WebDemo_Android";
+            synthesizerRequest.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 14; CPH2591 Build/UP1A.230620.001)";
+            var parameters = new Dictionary<string, string>
+            {
+                 { "cl_vers", "1-30" },
+                 { "req_text", text },
+                 { "cl_login", "AcapelaGroup" },
+                 { "cl_app", "AcapelaGroup_WebDemo_Android" },
+                 { "req_comment", $"{{\"nonce\":\"{_CachedNonce}\",\"user\":\"{_CachedEmail}\"}}" },
+                 { "prot_vers", "2" },
+                 { "cl_env", "ACAPELA_VOICES" },
+                 { "cl_pwd", "" },
+                 { "req_voice", voiceid },
+                 { "req_echo", "ON" },
+            };
+
+            var parametersList = parameters
+                .Select(p => $"{Uri.EscapeDataString(p.Key)}={Uri.EscapeDataString(p.Value)}")
+                .ToList();
+
+            var synthesizerRequestString = string.Join("&", parametersList);
             var data = Encoding.ASCII.GetBytes(synthesizerRequestString);
             synthesizerRequest.Method = "POST";
             synthesizerRequest.ContentType = "application/x-www-form-urlencoded";
@@ -72,8 +90,8 @@ namespace AcapellaDownloader
 
             var synthesizerResponseStream = synthesizerRequest.GetResponse().GetResponseStream();
             if (synthesizerResponseStream == null)
-            { 
-                _LastFailed = true; 
+            {
+                _LastFailed = true;
                 return "";
             }
             var synthesizerResponseString = new StreamReader(synthesizerResponseStream).ReadToEnd();

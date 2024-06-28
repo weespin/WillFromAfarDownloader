@@ -15,10 +15,14 @@ namespace AcapellaDownloader
         private const string _SynthesizerEndpoint = "https://www.acapela-group.com:8443/Services/Synthesizer";
         private static string _CachedNonce = "";
         private static string _CachedEmail = "";
+        private static string _CachedUserAgent = "";
         private static bool _LastFailed = false;
         public static bool UpdateNonceToken()
         {
+            _CachedUserAgent = GenerateUserAgent();
+
             HttpClient httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("User-Agent", _CachedUserAgent);
             Random random = new Random();
 
             int emailLength = random.Next(10, 20);
@@ -53,14 +57,39 @@ namespace AcapellaDownloader
             return false;
         }
 
+        public static string GenerateUserAgent()
+        {
+            Random rnd = new Random();
+            string[] Versions = new string[] { "8.0.0", "8.1.0", "9", "10", "11", "12", "13" };
+            string[] DeviceNames = new string[] { "SM-S901B", "SM-S908B", "SM-G991B", "SM-G998B", "SM-A536B", "SM-A515F", "SM-G973F", "Pixel 6", "Pixel 6a",
+                "Pixel 6 Pro", "Pixel 7", "Pixel 7 Pro", "Redmi Note 9 Pro", "Redmi Note 8 Pro", "M2102J20SG", "2201116SG", "DE2118" };
+
+            int buildNumLen = rnd.Next(3, 4);
+            StringBuilder buildNumGen = new StringBuilder(buildNumLen);
+
+            for (int i = 0; i < 3; i++)
+            {
+                buildNumGen.Append((char)rnd.Next('A', 'Z' + 1));
+            }
+
+            for (int i = 0; i < buildNumLen; i++)
+            {
+                buildNumGen.Append(rnd.Next(0, 10));
+            }
+
+            return $"Dalvik/2.1.0 (Linux; U; Android {Versions[rnd.Next(0, Versions.Length - 1)]}; {DeviceNames[rnd.Next(0, DeviceNames.Length - 1)]} Build/{buildNumGen.ToString()})";
+
+        }
+
         public static string GetSoundLink(string text, string voiceid)
         {
-            if (_CachedEmail == "" || _CachedNonce == "" || _LastFailed)
+            if (_CachedEmail == "" || _CachedNonce == "" || _CachedUserAgent == "" || _LastFailed)
             {
                 UpdateNonceToken();
             }
+
             var synthesizerRequest = (HttpWebRequest)WebRequest.Create(_SynthesizerEndpoint);
-            synthesizerRequest.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 14; CPH2591 Build/UP1A.230620.001)";
+            synthesizerRequest.UserAgent = _CachedUserAgent;
             var parameters = new Dictionary<string, string>
             {
                  { "cl_vers", "1-30" },

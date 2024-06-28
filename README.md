@@ -1,6 +1,6 @@
 # WillFromAfarDownloader
 ## GUI App for downloading TTS from Acapella Group
-[![Github Downloads (total)](https://img.shields.io/github/downloads/weespin/WillFromAfarDownloader/total.svg)](https://github.com/weespin/WillFromAfarDownloader) [![Github Downloads (total)](https://ci.appveyor.com/api/projects/status/github/weespin/WillFromAfarDownloader?branch=master&svg=true)](https://ci.appveyor.com/project/weespin26279/willfromafardownloader)   
+[![Github Downloads (total)](https://img.shields.io/github/downloads/weespin/WillFromAfarDownloader/total.svg)](https://tooomm.github.io/github-release-stats/?username=weespin&repository=WillFromAfarDownloader) [![Github Downloads (total)](https://ci.appveyor.com/api/projects/status/github/weespin/WillFromAfarDownloader?branch=master&svg=true)](https://ci.appveyor.com/project/weespin26279/willfromafardownloader)   
 
 ![Screenshot](https://yiff.nullcoreproject.net/i/45006d99.png)
 ## How to use CLI version

@@ -186,7 +186,7 @@
             this.Controls.Add(this.txtTextIn);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "AcapellaDownloader";
+            this.Text = "AcapellaDownloader (Type And Talk Edition)";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.tbPitch)).EndInit();
             this.ResumeLayout(false);
